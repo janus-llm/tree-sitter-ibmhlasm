@@ -1,0 +1,82 @@
+[
+  {
+    "type": "instruction",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "name",
+          "named": true
+        },
+        {
+          "type": "operands",
+          "named": true
+        },
+        {
+          "type": "operation",
+          "named": true
+        },
+        {
+          "type": "remark",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "operation",
+    "named": true,
+    "fields": {}
+  },
+  {
+    "type": "program",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": false,
+      "types": [
+        {
+          "type": "comment",
+          "named": true
+        },
+        {
+          "type": "instruction",
+          "named": true
+        },
+        {
+          "type": "title",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "title",
+    "named": true,
+    "fields": {}
+  },
+  {
+    "type": ",",
+    "named": false
+  },
+  {
+    "type": "comment",
+    "named": true
+  },
+  {
+    "type": "name",
+    "named": true
+  },
+  {
+    "type": "operands",
+    "named": true
+  },
+  {
+    "type": "remark",
+    "named": true
+  }
+]

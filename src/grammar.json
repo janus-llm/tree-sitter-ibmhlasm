@@ -1,0 +1,228 @@
+{
+  "name": "ibmhlasm",
+  "rules": {
+    "program": {
+      "type": "SEQ",
+      "members": [
+        {
+          "type": "CHOICE",
+          "members": [
+            {
+              "type": "SYMBOL",
+              "name": "comment"
+            },
+            {
+              "type": "SYMBOL",
+              "name": "title"
+            },
+            {
+              "type": "SYMBOL",
+              "name": "instruction"
+            },
+            {
+              "type": "SYMBOL",
+              "name": "_blank_line"
+            }
+          ]
+        },
+        {
+          "type": "REPEAT",
+          "content": {
+            "type": "SEQ",
+            "members": [
+              {
+                "type": "SYMBOL",
+                "name": "_newline"
+              },
+              {
+                "type": "CHOICE",
+                "members": [
+                  {
+                    "type": "SYMBOL",
+                    "name": "comment"
+                  },
+                  {
+                    "type": "SYMBOL",
+                    "name": "title"
+                  },
+                  {
+                    "type": "SYMBOL",
+                    "name": "instruction"
+                  },
+                  {
+                    "type": "SYMBOL",
+                    "name": "_blank_line"
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      ]
+    },
+    "_newline": {
+      "type": "PATTERN",
+      "value": "[\\s]*\\n"
+    },
+    "_blank_line": {
+      "type": "PATTERN",
+      "value": "[\\s]*\\n"
+    },
+    "title": {
+      "type": "SEQ",
+      "members": [
+        {
+          "type": "PATTERN",
+          "value": "TITLE"
+        },
+        {
+          "type": "SYMBOL",
+          "name": "_title_string"
+        }
+      ]
+    },
+    "_title_string": {
+      "type": "SEQ",
+      "members": [
+        {
+          "type": "PATTERN",
+          "value": "'"
+        },
+        {
+          "type": "PATTERN",
+          "value": "[a-zA-Z0-9 ¢.<(+&!$*);¬/|,%_>?`:#@'=~{}\\-\\\\\" + '\"' + \"]+"
+        },
+        {
+          "type": "PATTERN",
+          "value": "'"
+        }
+      ]
+    },
+    "instruction": {
+      "type": "CHOICE",
+      "members": [
+        {
+          "type": "SEQ",
+          "members": [
+            {
+              "type": "CHOICE",
+              "members": [
+                {
+                  "type": "SYMBOL",
+                  "name": "name"
+                },
+                {
+                  "type": "BLANK"
+                }
+              ]
+            },
+            {
+              "type": "SYMBOL",
+              "name": "operation"
+            },
+            {
+              "type": "CHOICE",
+              "members": [
+                {
+                  "type": "CHOICE",
+                  "members": [
+                    {
+                      "type": "STRING",
+                      "value": ","
+                    },
+                    {
+                      "type": "SYMBOL",
+                      "name": "operands"
+                    }
+                  ]
+                },
+                {
+                  "type": "BLANK"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "SEQ",
+          "members": [
+            {
+              "type": "CHOICE",
+              "members": [
+                {
+                  "type": "SYMBOL",
+                  "name": "name"
+                },
+                {
+                  "type": "BLANK"
+                }
+              ]
+            },
+            {
+              "type": "SYMBOL",
+              "name": "operation"
+            },
+            {
+              "type": "CHOICE",
+              "members": [
+                {
+                  "type": "STRING",
+                  "value": ","
+                },
+                {
+                  "type": "SYMBOL",
+                  "name": "operands"
+                }
+              ]
+            },
+            {
+              "type": "SYMBOL",
+              "name": "remark"
+            }
+          ]
+        }
+      ]
+    },
+    "operation": {
+      "type": "SYMBOL",
+      "name": "_alphanum_str"
+    },
+    "_alphanum_str": {
+      "type": "PATTERN",
+      "value": "[A-Za-z0-9]+"
+    }
+  },
+  "extras": [
+    {
+      "type": "PATTERN",
+      "value": "[ ]+"
+    }
+  ],
+  "conflicts": [],
+  "precedences": [],
+  "externals": [
+    {
+      "type": "SYMBOL",
+      "name": "name"
+    },
+    {
+      "type": "SYMBOL",
+      "name": "comment"
+    },
+    {
+      "type": "SYMBOL",
+      "name": "operands"
+    },
+    {
+      "type": "SYMBOL",
+      "name": "remark"
+    },
+    {
+      "type": "SYMBOL",
+      "name": "macro_internal_comment"
+    }
+  ],
+  "inline": [],
+  "supertypes": []
+}
+

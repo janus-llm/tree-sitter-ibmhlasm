@@ -1,0 +1,24 @@
+==================
+Operand Syntax Tests
+==================
+* OPERATION REMARK *
+         ACB   ,              This is a remark with no operands!
+* * IN OPERANDS *
+         USING *,R15
+* NESTED OPERANDS TODO! * 
+         CLC   0(0,R1),0(R5)       Q,ENTRY PAIR IN KEY SEQUENCE?
+---
+(program
+  (comment)
+  (instruction
+    (operation)
+    (remark))
+  (comment)
+  (instruction
+    (operation)
+    (operands))
+  (comment)
+  (instruction
+    (operation)
+    (operands)
+    (remark)))

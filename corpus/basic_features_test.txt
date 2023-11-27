@@ -1,0 +1,38 @@
+==================
+Basic Features Test
+==================
+* COMMENT *
+* NAME OPERATION *
+SAMP1    CSECT
+* OPERATION OPERANDS *
+         STM   14,12,12,13
+* NAME OPERATION OPERANDS * 
+SAMP2    OPER  R1,R3,R4
+* OPERATION OPERANDS REMARK *
+         ACB   12,23,43,43    This is a remark!
+* OPERATION *
+         ST
+---
+(program
+  (comment)
+  (comment)
+  (instruction
+    (name)
+    (operation))
+  (comment)
+  (instruction
+    (operation)
+    (operands))
+  (comment)
+  (instruction
+    (name)
+    (operation)
+    (operands))
+  (comment)
+  (instruction
+    (operation)
+    (operands)
+    (remark))
+  (comment)
+  (instruction
+    (operation)))

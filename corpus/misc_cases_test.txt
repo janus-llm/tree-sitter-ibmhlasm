@@ -1,0 +1,40 @@
+==================
+Misc Cases Test
+==================
+* WHITEPACE LINE *
+
+* NAME OPERATION *
+SAMP1    CSECT
+* NESTED OPERANDS *
+        LM    R11,R12,0(R1)       LOAD USER PARAMETERS.
+* SINGLE LETTER OPERATION *
+        L    R1
+* REMARK BEFORE SINGLE *? *
+DWORK    DS    0D,4X         2X3
+*
+* NO NEWLINE AT END OF FILE? * (TODO: Currently we check for \n, there    isn't one at EOF)
+---
+
+(program
+  (comment)
+  (comment)
+  (instruction
+    (name)
+    (operation))
+  (comment)
+  (instruction
+    (operation)
+    (operands)
+    (remark))
+  (comment)
+  (instruction
+    (operation)
+    (operands))
+  (comment)
+  (instruction
+    (name)
+    (operation)
+    (operands)
+    (remark))
+  (comment)
+  (comment))
