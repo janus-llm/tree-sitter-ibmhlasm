@@ -1,8 +1,14 @@
-node_modules/*
-corpus/local_tests/*
+# Node
+node_modules
+
+# Keep some samples local
 sample_code/*
+corpus/local_tests/*
+
+# Misc
 log.html
-node_modules/
 .DS_Store
+
+# Rust
 /Cargo.lock
 /target/
