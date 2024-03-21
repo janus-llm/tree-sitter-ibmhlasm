@@ -21,7 +21,7 @@
             },
             {
               "type": "SYMBOL",
-              "name": "_blank_line"
+              "name": "_newline"
             }
           ]
         },
@@ -51,7 +51,7 @@
                   },
                   {
                     "type": "SYMBOL",
-                    "name": "_blank_line"
+                    "name": "_newline"
                   }
                 ]
               }
@@ -61,10 +61,6 @@
       ]
     },
     "_newline": {
-      "type": "PATTERN",
-      "value": "[\\s]*\\n"
-    },
-    "_blank_line": {
       "type": "PATTERN",
       "value": "[\\s]*\\n"
     },
@@ -225,4 +221,3 @@
   "inline": [],
   "supertypes": []
 }
-
