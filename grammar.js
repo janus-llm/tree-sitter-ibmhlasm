@@ -18,7 +18,6 @@ module.exports = grammar({
     program: $ => seq(
       choice(
         $.comment, // Unlike remarks, comments take up an entire line
-        $.title, // Putting this earlier in the grammar for precedence
         $.instruction, // NAME OPCODE OPERANDS REMARK
         $._newline, // Whitespace lines are OK 
       ),
@@ -27,7 +26,6 @@ module.exports = grammar({
           $._newline,
         choice(
             $.comment,
-            $.title,
             $.instruction,
             $._newline,
           ),
@@ -36,18 +34,6 @@ module.exports = grammar({
     ),
 
     _newline: $ => /[\s]*\n/,
-
-    // Think it's worth writing out a special case for this since the operands seem a bit different
-    title: $ => seq(
-      /TITLE/,
-      $._title_string,
-    ),
-
-    _title_string: $ => seq(
-      /'/,
-      /[a-zA-Z0-9 ¢.<(+&!$*);¬/|,%_>?`:#@'=~{}\-\\" + '"' + "]+/, 
-      /'/,
-    ),
 
     instruction: $ => choice(
       seq(
