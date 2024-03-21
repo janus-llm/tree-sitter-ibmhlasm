@@ -5,9 +5,8 @@ module.exports = grammar({
   externals: $ => [
     $.name,  // scanner.c checks for a token in column 0
     $.comment, // scanner.c checks for a * in column 0
-    $.operands,
-    $.remark,
-    $.macro_internal_comment,
+    $.operands,  // Parsed via scanner.c to handle continuation lines
+    $.remark,  // Parsed via scanner.c to handle continuation lines
   ],
 
   // We need to manually control whitespace since this language cares about newlines
@@ -16,35 +15,27 @@ module.exports = grammar({
   ],
 
   rules: {
-    // TODO: The rule once, then repeat: (\n, the rule)
-
-    // file: $ => choice(
-    //     $.program,
-    // ),
-
     program: $ => seq(
       choice(
         $.comment, // Unlike remarks, comments take up an entire line
         $.title, // Putting this earlier in the grammar for precedence
         $.instruction, // NAME OPCODE OPERANDS REMARK
-        $._blank_line, // Whitespace lines are OK 
+        $._newline, // Whitespace lines are OK 
       ),
       repeat(
         seq(
           $._newline,
-          choice(
+        choice(
             $.comment,
             $.title,
             $.instruction,
-            $._blank_line,
+            $._newline,
           ),
         ),
       ),
     ),
 
     _newline: $ => /[\s]*\n/,
-
-    _blank_line: $ => /[\s]*\n/,
 
     // Think it's worth writing out a special case for this since the operands seem a bit different
     title: $ => seq(

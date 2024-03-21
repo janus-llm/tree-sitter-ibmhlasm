@@ -248,4 +248,8 @@ bool tree_sitter_ibmhlasm_external_scanner_scan(void *payload, TSLexer *lexer,
   if (valid_symbols[REMARK]) {
     return parse_w_cont(lexer, REMARK);
   }
+
+  else {
+    return false;
+  }
 }
