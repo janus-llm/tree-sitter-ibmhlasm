@@ -1,0 +1,56 @@
+==================
+Continuation Lines Test
+==================
+* No cont line
+BALAPI   CSECT  14,12,12(13)  REMARK
+* Cont line in remark
+BALAPHI  CSECT  14,12,12(13)  REMARKABCDEFGHIJKLMNOPQRSTUVWXYZABCDEFGHIJKLMNO
+                PQRSTUVWY
+* Cont line in operand
+BALAPHI  CSECT  ABCDEFGHIJKLOMNOPQRSTUVWXYZABCDEFGHIJKLOMNOPQRSTUVWXYZABCDEFGH
+                0123456789
+* Double cont line 
+BALAPHI  CSECT  ABCDEFGHIJKLOMNOPQRSTUVWXYZABCDEFGHIJKLOMNOPQRSTUVWXYZABCDEFGH
+                ABCDEFGHIJKLOMNOPQRSTUVWXYZABCDEFGHIJKLOMNOPQRSTUVWXYZABCDEFGH
+                0123456789
+* Cont line in operand, plus remark
+BALAPHI  CSECT  14,12,1'         '23131234564123456123456123456123456142563124
+                12312313123   REMARK
+* Cont line in comment
+* 123456789123456789123456789123456789123456789123456789123456789123456789123
+                123456789123456789
+* 987654321
+---
+(program
+  (comment)
+  (instruction
+    (name)
+    (operation)
+    (operands)
+    (remark))
+  (comment)
+  (instruction
+    (name)
+    (operation)
+    (operands)
+    (remark))
+  (comment)
+  (instruction
+    (name)
+    (operation)
+    (operands))
+  (comment)
+  (instruction
+    (name)
+    (operation)
+    (operands))
+  (comment)
+  (instruction
+    (name)
+    (operation)
+    (operands)
+    (remark))
+  (comment)
+  (comment)
+  (comment)
+)
