@@ -13,11 +13,7 @@
             },
             {
               "type": "SYMBOL",
-              "name": "title"
-            },
-            {
-              "type": "SYMBOL",
-              "name": "instruction"
+              "name": "_instruction"
             },
             {
               "type": "SYMBOL",
@@ -43,11 +39,7 @@
                   },
                   {
                     "type": "SYMBOL",
-                    "name": "title"
-                  },
-                  {
-                    "type": "SYMBOL",
-                    "name": "instruction"
+                    "name": "_instruction"
                   },
                   {
                     "type": "SYMBOL",
@@ -64,33 +56,105 @@
       "type": "PATTERN",
       "value": "[\\s]*\\n"
     },
-    "title": {
-      "type": "SEQ",
+    "_instruction": {
+      "type": "CHOICE",
       "members": [
         {
-          "type": "PATTERN",
-          "value": "TITLE"
+          "type": "PREC",
+          "value": 2,
+          "content": {
+            "type": "SYMBOL",
+            "name": "branch_instruction"
+          }
         },
         {
           "type": "SYMBOL",
-          "name": "_title_string"
+          "name": "instruction"
         }
       ]
     },
-    "_title_string": {
-      "type": "SEQ",
+    "branch_instruction": {
+      "type": "CHOICE",
       "members": [
         {
-          "type": "PATTERN",
-          "value": "'"
+          "type": "SEQ",
+          "members": [
+            {
+              "type": "CHOICE",
+              "members": [
+                {
+                  "type": "SYMBOL",
+                  "name": "name"
+                },
+                {
+                  "type": "BLANK"
+                }
+              ]
+            },
+            {
+              "type": "SYMBOL",
+              "name": "branch_operation"
+            },
+            {
+              "type": "CHOICE",
+              "members": [
+                {
+                  "type": "CHOICE",
+                  "members": [
+                    {
+                      "type": "STRING",
+                      "value": ","
+                    },
+                    {
+                      "type": "SYMBOL",
+                      "name": "operands"
+                    }
+                  ]
+                },
+                {
+                  "type": "BLANK"
+                }
+              ]
+            }
+          ]
         },
         {
-          "type": "PATTERN",
-          "value": "[a-zA-Z0-9 ¢.<(+&!$*);¬/|,%_>?`:#@'=~{}\\-\\\\\" + '\"' + \"]+"
-        },
-        {
-          "type": "PATTERN",
-          "value": "'"
+          "type": "SEQ",
+          "members": [
+            {
+              "type": "CHOICE",
+              "members": [
+                {
+                  "type": "SYMBOL",
+                  "name": "name"
+                },
+                {
+                  "type": "BLANK"
+                }
+              ]
+            },
+            {
+              "type": "SYMBOL",
+              "name": "branch_operation"
+            },
+            {
+              "type": "CHOICE",
+              "members": [
+                {
+                  "type": "STRING",
+                  "value": ","
+                },
+                {
+                  "type": "SYMBOL",
+                  "name": "operands"
+                }
+              ]
+            },
+            {
+              "type": "SYMBOL",
+              "name": "remark"
+            }
+          ]
         }
       ]
     },
@@ -180,12 +244,133 @@
       ]
     },
     "operation": {
-      "type": "SYMBOL",
-      "name": "_alphanum_str"
-    },
-    "_alphanum_str": {
       "type": "PATTERN",
       "value": "[A-Za-z0-9]+"
+    },
+    "branch_operation": {
+      "type": "CHOICE",
+      "members": [
+        {
+          "type": "STRING",
+          "value": "B"
+        },
+        {
+          "type": "STRING",
+          "value": "BALR"
+        },
+        {
+          "type": "STRING",
+          "value": "BC"
+        },
+        {
+          "type": "STRING",
+          "value": "BCR"
+        },
+        {
+          "type": "STRING",
+          "value": "BE"
+        },
+        {
+          "type": "STRING",
+          "value": "BZ"
+        },
+        {
+          "type": "STRING",
+          "value": "BH"
+        },
+        {
+          "type": "STRING",
+          "value": "BNE"
+        },
+        {
+          "type": "STRING",
+          "value": "BNZ"
+        },
+        {
+          "type": "STRING",
+          "value": "BL"
+        },
+        {
+          "type": "STRING",
+          "value": "BLE"
+        },
+        {
+          "type": "STRING",
+          "value": "BP"
+        },
+        {
+          "type": "STRING",
+          "value": "BPE"
+        },
+        {
+          "type": "STRING",
+          "value": "BPR"
+        },
+        {
+          "type": "STRING",
+          "value": "BR"
+        },
+        {
+          "type": "STRING",
+          "value": "BHR"
+        },
+        {
+          "type": "STRING",
+          "value": "BNR"
+        },
+        {
+          "type": "STRING",
+          "value": "BRL"
+        },
+        {
+          "type": "STRING",
+          "value": "BNER"
+        },
+        {
+          "type": "STRING",
+          "value": "BNHR"
+        },
+        {
+          "type": "STRING",
+          "value": "BNLR"
+        },
+        {
+          "type": "STRING",
+          "value": "BNPR"
+        },
+        {
+          "type": "STRING",
+          "value": "BNR"
+        },
+        {
+          "type": "STRING",
+          "value": "BPR"
+        },
+        {
+          "type": "STRING",
+          "value": "BRAS"
+        },
+        {
+          "type": "STRING",
+          "value": "BRASL"
+        },
+        {
+          "type": "STRING",
+          "value": "BRC"
+        },
+        {
+          "type": "STRING",
+          "value": "BRCL"
+        },
+        {
+          "type": "STRING",
+          "value": "BXH"
+        },
+        {
+          "type": "STRING",
+          "value": "BXLE"
+        }
+      ]
     }
   },
   "extras": [
@@ -212,10 +397,6 @@
     {
       "type": "SYMBOL",
       "name": "remark"
-    },
-    {
-      "type": "SYMBOL",
-      "name": "macro_internal_comment"
     }
   ],
   "inline": [],

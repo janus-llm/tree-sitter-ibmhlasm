@@ -18,7 +18,7 @@ module.exports = grammar({
     program: $ => seq(
       choice(
         $.comment, // Unlike remarks, comments take up an entire line
-        $.instruction, // NAME OPCODE OPERANDS REMARK
+        $._instruction, // NAME OPCODE OPERANDS REMARK
         $._newline, // Whitespace lines are OK 
       ),
       repeat(
@@ -26,7 +26,7 @@ module.exports = grammar({
           $._newline,
         choice(
             $.comment,
-            $.instruction,
+            $._instruction,
             $._newline,
           ),
         ),
@@ -34,6 +34,37 @@ module.exports = grammar({
     ),
 
     _newline: $ => /[\s]*\n/,
+
+    _instruction: $ => choice(
+      prec(2,
+        $.branch_instruction,
+      ),
+      $.instruction,
+    ),
+  
+    branch_instruction: $ => choice(
+      seq(
+        // No remark case
+        optional($.name),
+        $.branch_operation,
+        optional(
+          choice(
+            ",",
+            $.operands,
+          ),
+        ),
+      ),
+      // Remark case: if there's a remark, an operand list is required (or at least a ,) 
+      seq(
+        optional($.name),
+        $.branch_operation,
+        choice(
+          ",",
+          $.operands,
+        ),
+        $.remark,
+      ),
+    ),
 
     instruction: $ => choice(
       seq(
@@ -60,8 +91,13 @@ module.exports = grammar({
     ),
 
     // Opcodes are alphanumeric
-    operation: $ => $._alphanum_str,
+    // operation: $ => $._alphanum_str,
 
-    _alphanum_str: $ => /[A-Za-z0-9]+/,
+    operation: $ => /[A-Za-z0-9]+/,
+
+    branch_operation: $ => choice(
+      "B", "BALR", "BC", "BCR", "BE", "BZ", "BH", "BNE", "BNZ", "BL", "BLE", "BP", "BPE", "BPR", "BR", "BHR", "BNR", "BRL", "BNER", "BNHR", "BNLR", "BNPR", "BNR", "BPR", "BRAS", "BRASL", "BRC", "BRCL", "BXH", "BXLE"
+    ),
+
   }
 });
