@@ -2,11 +2,15 @@
 #include <stdio.h>
 #include <wctype.h>
 
+#define CONTINUATION_COL 71 // A non-WS char in column 72 indicates a continuation line, but TS is 0-indexed
+#define CONT_LINE_START_COL 15  // Follow up continuation lines begin on column 16 
+
 enum TokenType {
   NAME,
   COMMENT,
   OPERANDS,
   REMARK,
+  CICS_ARGS,
 };
 
 static void advance(TSLexer * lexer)
@@ -61,21 +65,19 @@ static bool check_for_placeholder_operands(TSLexer * lexer)
 static void skip_to_cont_column(TSLexer * lexer)
 {
   // Skip the 16 spaces before the continuation column
-  // printf("Skipping 16 spaces to get to continuation column!\n");
-  for (int i = 0; i < 16; i++) {
-    // printf("%d, ", lexer->lookahead);
+  for (int i = 0; i < CONT_LINE_START_COL; i++) {
     advance(lexer);
   }
-  // printf("\n");
 }
 
 static bool keep_parsing_operand(TSLexer * lexer, bool continuation_line, bool in_quoted_string) 
 {
-  // TODO: If we're in a quted string it's only wspace that we're OK with, not newlines!
-  /* Keep parsing through the operand if:
-  * We're moving through non-whitespace
-  * We're at a newline and we're expecting a continuation line next
-  * We're in the middle of quotes (spaces OK in this case)  TODO: hitting a newline should bail here, in case somehow we get a single quote!
+  // TODO: If we're in a quoted string it's only wspace that we're OK with, not newlines!
+  /* 
+  *  Keep parsing through the operand if:
+  *  We're moving through non-whitespace
+  *  We're at a newline and we're expecting a continuation line next
+  *  We're in the middle of quotes (spaces OK in this case)  TODO: hitting a newline should bail here, in case somehow we get a single quote!
   */
   if ((lexer->eof(lexer) == 0) && (iswspace(lexer->lookahead) == 0 || (continuation_line == true && iswcntrl(lexer->lookahead)) || (in_quoted_string == true))) {
     return true;
@@ -87,7 +89,8 @@ static bool keep_parsing_operand(TSLexer * lexer, bool continuation_line, bool i
 
 static bool keep_parsing_remark(TSLexer * lexer, bool continuation_line, bool in_quoted_string) 
 {
-  /* Keep parsing through the remark if:
+  /* 
+  * Keep parsing through the remark if:
   * We're not at the end of the line
   * We're at a newline and we're expecting a continuation line next
   */
@@ -102,7 +105,8 @@ static bool keep_parsing_remark(TSLexer * lexer, bool continuation_line, bool in
 // TODO: Combine with remark, since the rules are the same? (are they?)
 static bool keep_parsing_comment(TSLexer * lexer, bool continuation_line, bool in_quoted_string) 
 {
-  /* Keep parsing through the comment if:
+  /* 
+  * Keep parsing through the comment if:
   * We're not at the end of the line
   * We're at a newline and we're expecting a continuation line next
   */
@@ -143,7 +147,10 @@ static enum TokenType parse_w_cont(TSLexer * lexer, enum TokenType current_token
   if (current_token == OPERANDS) {
     keep_parsing_func_ptr = &keep_parsing_operand;
   }
-  else if (current_token == REMARK){
+  else if (current_token == REMARK) {
+    keep_parsing_func_ptr = &keep_parsing_remark;
+  }
+  else if (current_token == CICS_ARGS) {
     keep_parsing_func_ptr = &keep_parsing_remark;
   }
 
@@ -170,38 +177,22 @@ static enum TokenType parse_w_cont(TSLexer * lexer, enum TokenType current_token
       }
     }
 
-    // If a line has a non-whitespace character in column 72, then the next line will be a continuation of it
-    if (lexer->get_column(lexer) == 72 && iswspace(lexer->lookahead) == 0) {
+    // If a line has a non-whitespace character in column 72 (71 here, since columns are 0-indexed in TS), then the next line will be a continuation of it
+    if (lexer->get_column(lexer) == CONTINUATION_COL && iswspace(lexer->lookahead) == 0) {
       continuation_line = true;
     }
 
     // If we hit the end of a line, and expect a continuation...
     if (iswcntrl(lexer->lookahead) && continuation_line == true) { // TODO: Maybe this should be a while?
 
-      while (continuation_line) {
-        // Jump down to the next line to read the continuation
-        advance(lexer); // Advance past \n
+      // We don't know if this line will be continued past this, so reset our continuation line variable
+      continuation_line = false;
 
-        // We don't know if this line will be continued past this, so reset our continuation line variable
-        continuation_line = false;
+      // Jump down to the next line to read the continuation
+      advance(lexer); // Advance past \n
 
-        // Continuation lines begin in column 16, so skip up to that point
-        skip_to_cont_column(lexer);
-
-        // Read in the symbol on the continuation line
-        while (iswspace(lexer->lookahead) == 0) {
-
-          // Check if there's going to be another continuation line afterwards
-          if (lexer->get_column(lexer) == 72 && iswspace(lexer->lookahead) == 0) {
-            continuation_line = true;
-          }
-          advance(lexer);
-        }
-      }
-      // Label the symbol
-      lexer->result_symbol = current_token;
-
-      return true;
+      // Continuation lines begin in column 16, so skip up to that point
+      skip_to_cont_column(lexer);
     }
 
     // Advance through characters
@@ -247,6 +238,10 @@ bool tree_sitter_ibmhlasm_external_scanner_scan(void *payload, TSLexer *lexer,
 
   if (valid_symbols[REMARK]) {
     return parse_w_cont(lexer, REMARK);
+  }
+
+  if(valid_symbols[CICS_ARGS]) {
+    return parse_w_cont(lexer, CICS_ARGS);
   }
 
   else {

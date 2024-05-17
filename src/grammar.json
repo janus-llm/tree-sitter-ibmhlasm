@@ -13,7 +13,7 @@
             },
             {
               "type": "SYMBOL",
-              "name": "_instruction"
+              "name": "instruction"
             },
             {
               "type": "SYMBOL",
@@ -34,12 +34,20 @@
                 "type": "CHOICE",
                 "members": [
                   {
+                    "type": "PREC",
+                    "value": 2,
+                    "content": {
+                      "type": "SYMBOL",
+                      "name": "cics_macro"
+                    }
+                  },
+                  {
                     "type": "SYMBOL",
                     "name": "comment"
                   },
                   {
                     "type": "SYMBOL",
-                    "name": "_instruction"
+                    "name": "instruction"
                   },
                   {
                     "type": "SYMBOL",
@@ -56,105 +64,20 @@
       "type": "PATTERN",
       "value": "[\\s]*\\n"
     },
-    "_instruction": {
-      "type": "CHOICE",
+    "cics_macro": {
+      "type": "SEQ",
       "members": [
         {
-          "type": "PREC",
-          "value": 2,
-          "content": {
-            "type": "SYMBOL",
-            "name": "branch_instruction"
-          }
+          "type": "STRING",
+          "value": "EXEC"
+        },
+        {
+          "type": "STRING",
+          "value": "CICS"
         },
         {
           "type": "SYMBOL",
-          "name": "instruction"
-        }
-      ]
-    },
-    "branch_instruction": {
-      "type": "CHOICE",
-      "members": [
-        {
-          "type": "SEQ",
-          "members": [
-            {
-              "type": "CHOICE",
-              "members": [
-                {
-                  "type": "SYMBOL",
-                  "name": "name"
-                },
-                {
-                  "type": "BLANK"
-                }
-              ]
-            },
-            {
-              "type": "SYMBOL",
-              "name": "branch_operation"
-            },
-            {
-              "type": "CHOICE",
-              "members": [
-                {
-                  "type": "CHOICE",
-                  "members": [
-                    {
-                      "type": "STRING",
-                      "value": ","
-                    },
-                    {
-                      "type": "SYMBOL",
-                      "name": "operands"
-                    }
-                  ]
-                },
-                {
-                  "type": "BLANK"
-                }
-              ]
-            }
-          ]
-        },
-        {
-          "type": "SEQ",
-          "members": [
-            {
-              "type": "CHOICE",
-              "members": [
-                {
-                  "type": "SYMBOL",
-                  "name": "name"
-                },
-                {
-                  "type": "BLANK"
-                }
-              ]
-            },
-            {
-              "type": "SYMBOL",
-              "name": "branch_operation"
-            },
-            {
-              "type": "CHOICE",
-              "members": [
-                {
-                  "type": "STRING",
-                  "value": ","
-                },
-                {
-                  "type": "SYMBOL",
-                  "name": "operands"
-                }
-              ]
-            },
-            {
-              "type": "SYMBOL",
-              "name": "remark"
-            }
-          ]
+          "name": "cics_arguments"
         }
       ]
     },
@@ -244,133 +167,16 @@
       ]
     },
     "operation": {
+      "type": "SYMBOL",
+      "name": "_alphanum_str"
+    },
+    "_alphanum_str": {
       "type": "PATTERN",
       "value": "[A-Za-z0-9]+"
     },
-    "branch_operation": {
-      "type": "CHOICE",
-      "members": [
-        {
-          "type": "STRING",
-          "value": "B"
-        },
-        {
-          "type": "STRING",
-          "value": "BALR"
-        },
-        {
-          "type": "STRING",
-          "value": "BC"
-        },
-        {
-          "type": "STRING",
-          "value": "BCR"
-        },
-        {
-          "type": "STRING",
-          "value": "BE"
-        },
-        {
-          "type": "STRING",
-          "value": "BZ"
-        },
-        {
-          "type": "STRING",
-          "value": "BH"
-        },
-        {
-          "type": "STRING",
-          "value": "BNE"
-        },
-        {
-          "type": "STRING",
-          "value": "BNZ"
-        },
-        {
-          "type": "STRING",
-          "value": "BL"
-        },
-        {
-          "type": "STRING",
-          "value": "BLE"
-        },
-        {
-          "type": "STRING",
-          "value": "BP"
-        },
-        {
-          "type": "STRING",
-          "value": "BPE"
-        },
-        {
-          "type": "STRING",
-          "value": "BPR"
-        },
-        {
-          "type": "STRING",
-          "value": "BR"
-        },
-        {
-          "type": "STRING",
-          "value": "BHR"
-        },
-        {
-          "type": "STRING",
-          "value": "BNR"
-        },
-        {
-          "type": "STRING",
-          "value": "BRL"
-        },
-        {
-          "type": "STRING",
-          "value": "BNER"
-        },
-        {
-          "type": "STRING",
-          "value": "BNHR"
-        },
-        {
-          "type": "STRING",
-          "value": "BNLR"
-        },
-        {
-          "type": "STRING",
-          "value": "BNPR"
-        },
-        {
-          "type": "STRING",
-          "value": "BNR"
-        },
-        {
-          "type": "STRING",
-          "value": "BPR"
-        },
-        {
-          "type": "STRING",
-          "value": "BRAS"
-        },
-        {
-          "type": "STRING",
-          "value": "BRASL"
-        },
-        {
-          "type": "STRING",
-          "value": "BRC"
-        },
-        {
-          "type": "STRING",
-          "value": "BRCL"
-        },
-        {
-          "type": "STRING",
-          "value": "BXH"
-        },
-        {
-          "type": "STRING",
-          "value": "BXLE"
-        }
-      ]
+    "cics_macro_argument": {
+      "type": "PATTERN",
+      "value": "[A-Za-z0-9\\(\\)_]+"
     }
   },
   "extras": [
@@ -397,6 +203,10 @@
     {
       "type": "SYMBOL",
       "name": "remark"
+    },
+    {
+      "type": "SYMBOL",
+      "name": "cics_arguments"
     }
   ],
   "inline": [],

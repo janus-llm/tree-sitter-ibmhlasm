@@ -7,7 +7,8 @@ module.exports = grammar({
     $.comment, // scanner.c checks for a * in column 0
     $.operands,  // Parsed via scanner.c to handle continuation lines
     $.remark,  // Parsed via scanner.c to handle continuation lines
-  ],
+    $.cics_arguments, // Parsed via scanner.c to handle continuation lines
+  ], 
 
   // We need to manually control whitespace since this language cares about newlines
   extras: $ => [
@@ -17,6 +18,7 @@ module.exports = grammar({
   rules: {
     program: $ => seq(
       choice(
+        prec(2, $.cics_macro),
         $.comment, // Unlike remarks, comments take up an entire line
         $._instruction, // NAME OPCODE OPERANDS REMARK
         $._newline, // Whitespace lines are OK 
@@ -25,6 +27,7 @@ module.exports = grammar({
         seq(
           $._newline,
         choice(
+            prec(2, $.cics_macro),
             $.comment,
             $._instruction,
             $._newline,
@@ -66,6 +69,12 @@ module.exports = grammar({
       ),
     ),
 
+    cics_macro: $ => seq(
+      "EXEC",
+      "CICS",
+      $.cics_arguments,
+    ),
+
     instruction: $ => choice(
       seq(
         // No remark case
@@ -99,5 +108,8 @@ module.exports = grammar({
       "B", "BALR", "BC", "BCR", "BE", "BZ", "BH", "BNE", "BNZ", "BL", "BLE", "BP", "BPE", "BPR", "BR", "BHR", "BNR", "BRL", "BNER", "BNHR", "BNLR", "BNPR", "BNR", "BPR", "BRAS", "BRASL", "BRC", "BRCL", "BXH", "BXLE"
     ),
 
+    _alphanum_str: $ => /[A-Za-z0-9]+/,
+
+    cics_macro_argument: $ => /[A-Za-z0-9\(\)_]+/,
   }
 });
