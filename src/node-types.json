@@ -1,5 +1,37 @@
 [
   {
+    "type": "branch_instruction",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "branch_operation",
+          "named": true
+        },
+        {
+          "type": "name",
+          "named": true
+        },
+        {
+          "type": "operands",
+          "named": true
+        },
+        {
+          "type": "remark",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "branch_operation",
+    "named": true,
+    "fields": {}
+  },
+  {
     "type": "cics_macro",
     "named": true,
     "fields": {},
@@ -55,6 +87,10 @@
       "required": false,
       "types": [
         {
+          "type": "branch_instruction",
+          "named": true
+        },
+        {
           "type": "cics_macro",
           "named": true
         },
@@ -71,6 +107,118 @@
   },
   {
     "type": ",",
+    "named": false
+  },
+  {
+    "type": "B",
+    "named": false
+  },
+  {
+    "type": "BALR",
+    "named": false
+  },
+  {
+    "type": "BC",
+    "named": false
+  },
+  {
+    "type": "BCR",
+    "named": false
+  },
+  {
+    "type": "BE",
+    "named": false
+  },
+  {
+    "type": "BH",
+    "named": false
+  },
+  {
+    "type": "BHR",
+    "named": false
+  },
+  {
+    "type": "BL",
+    "named": false
+  },
+  {
+    "type": "BLE",
+    "named": false
+  },
+  {
+    "type": "BNE",
+    "named": false
+  },
+  {
+    "type": "BNER",
+    "named": false
+  },
+  {
+    "type": "BNHR",
+    "named": false
+  },
+  {
+    "type": "BNLR",
+    "named": false
+  },
+  {
+    "type": "BNPR",
+    "named": false
+  },
+  {
+    "type": "BNR",
+    "named": false
+  },
+  {
+    "type": "BNZ",
+    "named": false
+  },
+  {
+    "type": "BP",
+    "named": false
+  },
+  {
+    "type": "BPE",
+    "named": false
+  },
+  {
+    "type": "BPR",
+    "named": false
+  },
+  {
+    "type": "BR",
+    "named": false
+  },
+  {
+    "type": "BRAS",
+    "named": false
+  },
+  {
+    "type": "BRASL",
+    "named": false
+  },
+  {
+    "type": "BRC",
+    "named": false
+  },
+  {
+    "type": "BRCL",
+    "named": false
+  },
+  {
+    "type": "BRL",
+    "named": false
+  },
+  {
+    "type": "BXH",
+    "named": false
+  },
+  {
+    "type": "BXLE",
+    "named": false
+  },
+  {
+    "type": "BZ",
     "named": false
   },
   {

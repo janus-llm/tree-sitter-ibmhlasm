@@ -1,7 +1,7 @@
 {
   "targets": [
     {
-      "target_name": "tree_sitter_YOUR_LANGUAGE_NAME_binding",
+      "target_name": "tree_sitter_ibmhlasm_binding",
       "include_dirs": [
         "<!(node -e \"require('nan')\")",
         "src"
@@ -10,7 +10,6 @@
         "bindings/node/binding.cc",
         "src/parser.c",
         "src/scanner.c"
-        # If your language uses an external scanner, add it here.
       ],
       "cflags_c": [
         "-std=c99",
