@@ -8,7 +8,7 @@ module.exports = grammar({
     $.operands,  // Parsed via scanner.c to handle continuation lines
     $.remark,  // Parsed via scanner.c to handle continuation lines
     $.cics_arguments, // Parsed via scanner.c to handle continuation lines
-  ], 
+  ],
 
   // We need to manually control whitespace since this language cares about newlines
   extras: $ => [
@@ -17,23 +17,25 @@ module.exports = grammar({
 
   rules: {
     program: $ => seq(
-      choice(
-        prec(2, $.cics_macro),
-        $.comment, // Unlike remarks, comments take up an entire line
-        $._instruction, // NAME OPCODE OPERANDS REMARK
-        $._newline, // Whitespace lines are OK 
-      ),
       repeat(
         seq(
+          $._line,
           $._newline,
-        choice(
-            prec(2, $.cics_macro),
-            $.comment,
-            $._instruction,
-            $._newline,
-          ),
         ),
       ),
+
+      // repeat(
+      //   choice(
+      //     $._section,
+      //   ),
+      // ),
+    ),
+
+    _line: $ => choice(
+      prec(2, $.cics_macro),
+      $.comment, // Unlike remarks, comments take up an entire line
+      $._instruction, // NAME OPCODE OPERANDS REMARK
+      $._newline, // Whitespace lines are OK
     ),
 
     _newline: $ => /[\s]*\n/,
@@ -43,31 +45,40 @@ module.exports = grammar({
         $.branch_instruction,
       ),
       $.instruction,
+      $.dsect_instruction,
+      $.csect_instruction,
     ),
-  
-    branch_instruction: $ => choice(
+
+    _section: $ => choice(
+      $.csect,
+      $.dsect,
+    ),
+
+    _section_body: $ => prec.left(2,
       seq(
-        // No remark case
-        optional($.name),
-        $.branch_operation,
-        optional(
-          choice(
-            ",",
-            $.operands,
+        $._newline,
+        repeat(
+          seq(
+            $._line,
+            $._newline,
           ),
         ),
       ),
-      // Remark case: if there's a remark, an operand list is required (or at least a ,) 
-      seq(
-        optional($.name),
-        $.branch_operation,
-        choice(
-          ",",
-          $.operands,
-        ),
-        $.remark,
-      ),
     ),
+
+    csect: $ => seq(
+      $.csect_instruction,
+      $._section_body,
+    ),
+
+    dsect: $ => seq(
+      $.dsect_instruction,
+      $._section_body,
+    ),
+
+    branch_instruction: $ => instruction_w_rule($.name, $.branch_operation, $.operands, $.remark),
+    dsect_instruction: $ => instruction_w_rule($.name, $.dsect_operation, $.operands, $.remark),
+    csect_instruction: $ => instruction_w_rule($.name, $.csect_operation, $.operands, $.remark),
 
     cics_macro: $ => seq(
       "EXEC",
@@ -87,7 +98,7 @@ module.exports = grammar({
           ),
         ),
       ),
-      // Remark case: if there's a remark, an operand list is required (or at least a ,) 
+      // Remark case: if there's a remark, an operand list is required (or at least a ,)
       seq(
         optional($.name),
         $.operation,
@@ -98,6 +109,10 @@ module.exports = grammar({
         $.remark,
       ),
     ),
+
+
+    csect_operation: $ => choice("CSECT", "DFHEIENT", "START"),
+    dsect_operation: $ => "DSECT",
 
     // Opcodes are alphanumeric
     // operation: $ => $._alphanum_str,
@@ -113,3 +128,30 @@ module.exports = grammar({
     cics_macro_argument: $ => /[A-Za-z0-9\(\)_]+/,
   }
 });
+
+function instruction_w_rule(name_rule, operation_rule, operands_rule, remark_rule) {
+  return choice(
+    // remark case: if there's a remark, an operand list is required (or at least a ,)
+    seq(
+      optional(name_rule),
+      operation_rule,
+      choice(
+        ",",
+        operands_rule,
+      ),
+      remark_rule,
+    ),
+    seq(
+      // no remark case
+      optional(name_rule),
+      operation_rule,
+      optional(
+        choice(
+          ",",
+          operands_rule,
+        )
+      )
+    )
+  )
+}
+

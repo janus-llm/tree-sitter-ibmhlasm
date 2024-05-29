@@ -47,6 +47,135 @@
     }
   },
   {
+    "type": "csect",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "branch_instruction",
+          "named": true
+        },
+        {
+          "type": "cics_macro",
+          "named": true
+        },
+        {
+          "type": "comment",
+          "named": true
+        },
+        {
+          "type": "csect_instruction",
+          "named": true
+        },
+        {
+          "type": "dsect_instruction",
+          "named": true
+        },
+        {
+          "type": "instruction",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "csect_instruction",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "csect_operation",
+          "named": true
+        },
+        {
+          "type": "name",
+          "named": true
+        },
+        {
+          "type": "operands",
+          "named": true
+        },
+        {
+          "type": "remark",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "csect_operation",
+    "named": true,
+    "fields": {}
+  },
+  {
+    "type": "dsect",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "branch_instruction",
+          "named": true
+        },
+        {
+          "type": "cics_macro",
+          "named": true
+        },
+        {
+          "type": "comment",
+          "named": true
+        },
+        {
+          "type": "csect_instruction",
+          "named": true
+        },
+        {
+          "type": "dsect_instruction",
+          "named": true
+        },
+        {
+          "type": "instruction",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "dsect_instruction",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "dsect_operation",
+          "named": true
+        },
+        {
+          "type": "name",
+          "named": true
+        },
+        {
+          "type": "operands",
+          "named": true
+        },
+        {
+          "type": "remark",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
     "type": "instruction",
     "named": true,
     "fields": {},
@@ -96,6 +225,14 @@
         },
         {
           "type": "comment",
+          "named": true
+        },
+        {
+          "type": "csect_instruction",
+          "named": true
+        },
+        {
+          "type": "dsect_instruction",
           "named": true
         },
         {
@@ -226,7 +363,19 @@
     "named": false
   },
   {
+    "type": "CSECT",
+    "named": false
+  },
+  {
+    "type": "DFHEIENT",
+    "named": false
+  },
+  {
     "type": "EXEC",
+    "named": false
+  },
+  {
+    "type": "START",
     "named": false
   },
   {
@@ -235,6 +384,10 @@
   },
   {
     "type": "comment",
+    "named": true
+  },
+  {
+    "type": "dsect_operation",
     "named": true
   },
   {
